@@ -1,0 +1,409 @@
+================================================================
+   MUNDO SIN GLUTEN - GUÍA DEFINITIVA
+   Crear la App Android + App Escritorio
+   
+   Fecha: Abril 2026
+   Backend: https://mundo-sin-gluten.onrender.com
+   Costo: $0
+================================================================
+
+
+================================================================
+ÍNDICE
+================================================================
+
+  PARTE 1 - Qué necesitás instalar en tu PC
+  PARTE 2 - Crear la App Android con Expo
+  PARTE 3 - Generar la APK (archivo instalable)
+  PARTE 4 - Crear la App de Escritorio (EXE)
+  PARTE 5 - Actualizar la app después de cambios
+  PARTE 6 - Problemas y soluciones
+
+
+================================================================
+PARTE 1 - QUÉ NECESITÁS INSTALAR EN TU PC
+================================================================
+
+Solo necesitás 2 programas. Nada más.
+
+--- 1.1: Node.js ---
+
+  1. Abrí el navegador
+  2. Andá a: https://nodejs.org
+  3. Descargá el botón grande verde que dice "LTS"
+  4. Abrí el archivo descargado
+  5. Dale Next → Next → Next → Install → Finish
+  6. Verificar que se instaló:
+     - Apretá la tecla Windows
+     - Escribí: cmd
+     - Abrí "Símbolo del sistema"
+     - Escribí: node --version
+     - Tiene que aparecer algo como: v22.x.x
+     - Si aparece "no se reconoce", reiniciá la PC y 
+       repetí este paso
+
+--- 1.2: Git ---
+
+  1. Andá a: https://git-scm.com
+  2. Click en "Download for Windows"
+  3. Abrí el archivo descargado
+  4. Dale Next a TODO sin cambiar nada → Install → Finish
+
+ESO ES TODO. No necesitás Android Studio, no necesitás
+Java, no necesitás nada más. Expo se encarga de compilar
+la APK en la nube.
+
+
+================================================================
+PARTE 2 - CREAR LA APP ANDROID CON EXPO
+================================================================
+
+--- 2.1: Instalar Expo CLI ---
+
+  1. Abrí cmd (Símbolo del sistema)
+  2. Ejecutá:
+
+     npm install -g expo-cli eas-cli
+
+  3. Esperá que termine (1-2 minutos)
+  4. Verificá:
+
+     expo --version
+
+     Tiene que mostrar un número. Si dice "no se reconoce",
+     cerrá cmd, abrilo de nuevo e intentá otra vez.
+
+
+--- 2.2: Crear cuenta en Expo ---
+
+  1. Abrí el navegador
+  2. Andá a: https://expo.dev
+  3. Click en "Sign Up"
+  4. Creá tu cuenta (gratis)
+  5. Anotá tu usuario y contraseña:
+
+     Usuario Expo: ________________________________________
+     Contraseña:   ________________________________________
+
+  6. Volvé a cmd y logueate:
+
+     eas login
+
+     Poné tu usuario y contraseña de Expo cuando te pida.
+
+
+--- 2.3: Descomprimir el proyecto ---
+
+  1. Yo (Claude) te voy a dar un archivo ZIP con la app
+  2. Descomprimilo donde quieras, por ejemplo:
+     C:\Users\user\Desktop\mundo-sin-gluten-app
+  3. Adentro vas a ver estos archivos:
+
+     mundo-sin-gluten-app/
+     ├── App.js
+     ├── app.json
+     ├── package.json
+     ├── eas.json
+     ├── babel.config.js
+     ├── assets/
+     │   ├── logo.jpg
+     │   ├── icon.png
+     │   ├── splash.png
+     │   └── adaptive-icon.png
+     └── src/
+         ├── screens/
+         ├── components/
+         └── services/
+             └── api.js
+
+
+--- 2.4: Configurar la URL del servidor ---
+
+  1. Abrí la carpeta del proyecto
+  2. Andá a src/services/api.js
+  3. Abrilo con Bloc de Notas
+  4. Verificá que la línea diga:
+
+     const BASE_URL = 'https://mundo-sin-gluten.onrender.com';
+
+     (Ya debería estar correcto. Si no, cambialo.)
+  5. Guardá y cerrá.
+
+
+--- 2.5: Instalar dependencias ---
+
+  1. Abrí cmd
+  2. Andá a la carpeta:
+
+     cd C:\Users\user\Desktop\mundo-sin-gluten-app
+
+  3. Ejecutá:
+
+     npm install
+
+  4. Esperá 2-3 minutos. Van a salir muchas líneas, es 
+     normal. Cuando vuelva a aparecer el cursor, terminó.
+
+     SI DA ERROR: probá con:
+     npm install --legacy-peer-deps
+
+
+--- 2.6: Probar en tu celular (opcional pero recomendado) ---
+
+  Antes de generar la APK, podés probar la app en tu 
+  celular en vivo:
+
+  1. En tu celular Android, abrí el Play Store
+  2. Buscá "Expo Go" e instalala
+  3. En cmd (en la carpeta del proyecto) ejecutá:
+
+     npx expo start
+
+  4. Te aparece un código QR en la terminal
+  5. Abrí la app "Expo Go" en tu celular
+  6. Escaneá el código QR
+  7. La app se abre en tu celular para probar
+
+  IMPORTANTE: Tu PC y celular tienen que estar en el 
+  mismo WiFi.
+
+  Para frenar: Ctrl + C en la terminal.
+
+
+================================================================
+PARTE 3 - GENERAR LA APK (archivo instalable)
+================================================================
+
+Acá es donde Expo brilla: compila la APK en la nube.
+No necesitás Android Studio ni Java. Solo internet.
+
+--- 3.1: Configurar EAS Build ---
+
+  1. En cmd, en la carpeta del proyecto:
+
+     eas build:configure
+
+  2. Si te pregunta plataforma, elegí: Android
+  3. Esto crea/actualiza el archivo eas.json
+
+
+--- 3.2: Generar APK de prueba ---
+
+  1. Ejecutá:
+
+     eas build -p android --profile preview
+
+  2. Te va a hacer algunas preguntas:
+     - "Generate a new Android Keystore?" → Sí (Yes)
+     - Cualquier otra pregunta → Enter para aceptar default
+
+  3. Empieza a compilar EN LA NUBE (no en tu PC)
+  4. Te da un link para ver el progreso, algo como:
+     https://expo.dev/accounts/tu-usuario/builds/xxxx
+
+  5. ESPERÁ. Puede tardar 10-20 minutos.
+
+  6. Cuando termine, te da un link para DESCARGAR la APK:
+     "Download artifact"
+
+  7. Descargá el archivo .apk
+
+  8. Pasalo al celular (por cable USB, WhatsApp, email, 
+     Google Drive, como quieras)
+
+  9. En el celular, abrí el archivo .apk
+     - Si te dice "no permitido" → andá a Configuración →
+       Seguridad → Activar "Instalar de fuentes desconocidas"
+       (o "Instalar apps desconocidas" para Chrome/Files)
+
+  10. Instalá. Listo. Tenés el ícono de Mundo Sin Gluten 
+      en tu celular.
+
+
+--- 3.3: Generar APK de producción (versión final) ---
+
+  Cuando estés conforme con la app de prueba:
+
+  1. Ejecutá:
+
+     eas build -p android --profile production
+
+  2. Esperá 10-20 minutos
+  3. Descargá la APK
+  4. Esta versión es la que podés distribuir o subir al 
+     Play Store si querés
+
+
+--- 3.4: Publicar en Google Play Store (opcional) ---
+
+  Si algún día querés publicarla:
+  1. Creá cuenta en Google Play Console (cuesta USD 25 una vez)
+  2. En vez de APK, generá un AAB:
+
+     eas build -p android --profile production
+
+     (eas.json ya está configurado para generar AAB en 
+     producción)
+
+  3. Subí el archivo .aab a Google Play Console
+
+
+================================================================
+PARTE 4 - CREAR LA APP DE ESCRITORIO (EXE)
+================================================================
+
+La app de escritorio usa Electron. Se abre en su propia
+ventana, no en un navegador.
+
+--- 4.1: Ir a la carpeta de escritorio ---
+
+  El ZIP que te doy también tiene la carpeta app-desktop/
+
+  1. Abrí cmd
+  2. Andá a la carpeta:
+
+     cd C:\Users\user\Desktop\mundo-sin-gluten-app\app-desktop
+
+--- 4.2: Instalar dependencias ---
+
+     npm install
+
+     Esperá 2-3 minutos.
+
+--- 4.3: Configurar URL del servidor ---
+
+  1. Abrí src/index.html con Bloc de Notas
+  2. Buscá la línea:
+
+     const API_URL = "https://mundo-sin-gluten.onrender.com";
+
+  3. Verificá que sea tu URL correcta
+  4. Guardá
+
+--- 4.4: Probar ---
+
+     npm start
+
+  Se abre una ventana con la app. NO es un navegador.
+  Si funciona bien, cerrala (Ctrl+Q o la X).
+
+--- 4.5: Generar el instalador .exe ---
+
+     npm run build
+
+  Esperá 5-10 minutos.
+  Se crea la carpeta dist/ con el archivo:
+  "Mundo Sin Gluten Setup 1.0.0.exe"
+
+  Ejecutá ese archivo para instalar.
+  Te crea:
+  - Ícono en el escritorio
+  - Entrada en Inicio → Programas
+  - Se abre en su propia ventana
+
+
+================================================================
+PARTE 5 - ACTUALIZAR LA APP DESPUÉS DE CAMBIOS
+================================================================
+
+Si yo (Claude) te doy archivos actualizados:
+
+--- Para la app Android: ---
+
+  1. Reemplazá los archivos que te pase en la carpeta
+  2. En cmd, en la carpeta del proyecto:
+
+     eas build -p android --profile preview
+
+  3. Descargá la nueva APK e instalala
+     (se actualiza sobre la anterior, no perdés datos)
+
+--- Para la app de escritorio: ---
+
+  1. Reemplazá los archivos
+  2. npm run build
+  3. Instalá el nuevo .exe (reemplaza el anterior)
+
+--- Para el backend: ---
+
+  1. Reemplazá los archivos en la carpeta backend
+  2. En cmd:
+
+     cd backend
+     git add .
+     git commit -m "actualización"
+     git push
+
+  3. Render detecta el cambio y actualiza solo (2-3 min)
+
+
+================================================================
+PARTE 6 - PROBLEMAS Y SOLUCIONES
+================================================================
+
+PROBLEMA: "npm" no se reconoce
+SOLUCIÓN: Reinstalá Node.js, reiniciá la PC
+
+PROBLEMA: "expo" no se reconoce
+SOLUCIÓN: npm install -g expo-cli eas-cli
+          Cerrá y abrí cmd de nuevo
+
+PROBLEMA: "eas login" falla
+SOLUCIÓN: Verificá usuario/contraseña en expo.dev
+
+PROBLEMA: El build tarda mucho
+SOLUCIÓN: Es normal, 10-20 min. Expo compila en la nube.
+          Podés ver el progreso en el link que te da.
+
+PROBLEMA: La APK no se instala
+SOLUCIÓN: Configuración → Seguridad → Activar 
+          "Instalar de fuentes desconocidas"
+
+PROBLEMA: La app dice "Error de conexión"
+SOLUCIÓN: 
+  - Verificá que tengas internet
+  - Render gratis se "duerme" → esperá 30 seg y reintentá
+  - Verificá la URL en src/services/api.js
+
+PROBLEMA: La cámara no funciona
+SOLUCIÓN: La app pide permisos al primer uso. Aceptalos.
+          Si los rechazaste, andá a Configuración → Apps →
+          Mundo Sin Gluten → Permisos → Cámara → Permitir
+
+PROBLEMA: npm install da error
+SOLUCIÓN: Probá: npm install --legacy-peer-deps
+
+PROBLEMA: Electron no genera .exe
+SOLUCIÓN: npm run build -- --win
+
+PROBLEMA: "eas build" pide pagar
+SOLUCIÓN: El plan gratis de Expo permite 30 builds por mes.
+          Si llegaste al límite, esperá al mes siguiente.
+
+
+================================================================
+COSTOS
+================================================================
+
+  Expo (compilar APK)    → $0 (30 builds gratis/mes)
+  Render (servidor)      → $0 (plan gratis)
+  Gemini (IA)            → $0 (15 llamadas/min gratis)
+  GitHub                 → $0
+  Google Play Store      → USD 25 (una vez, OPCIONAL)
+  ─────────────────────────────────────────
+  TOTAL                  → $0/mes
+
+
+================================================================
+TUS DATOS (completá al instalar)
+================================================================
+
+  Expo usuario:    ________________________________________
+  Expo contraseña: ________________________________________
+  URL Render:      ________________________________________
+  Gemini Key:      ________________________________________
+  GitHub usuario:  ________________________________________
+
+================================================================
+FIN - Guardá este archivo en un lugar seguro
+================================================================

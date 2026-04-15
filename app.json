@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Mundo Sin Gluten",
+    "slug": "mundo-sin-gluten",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F5F6FA"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mundosingluten.pos"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F5F6FA"
+      },
+      "package": "com.mundosingluten.pos",
+      "permissions": ["CAMERA"]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        { "cameraPermission": "Mundo Sin Gluten necesita acceder a la cámara para escanear listas de precios" }
+      ],
+      [
+        "expo-image-picker",
+        { "photosPermission": "Mundo Sin Gluten necesita acceder a tus fotos para procesar listas de precios" }
+      ]
+    ]
+  }
+}
