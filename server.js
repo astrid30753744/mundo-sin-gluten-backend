@@ -1,4 +1,4 @@
-const cors = require("cors");
+﻿const cors = require("cors");
 const express = require("express");
 require("dotenv").config();
 
@@ -173,12 +173,9 @@ function normalizarConfig(config = {}) {
 function calcularPrecioPublico(precioBase, config) {
   let precio = Number(precioBase) || 0;
 
-  precio *= 1 + config.flete / 100;
-  precio *= 1 + config.merma / 100;
-  precio *= 1 + config.otros / 100;
-  precio *= 1 + config.ganancia / 100;
-  precio *= 1 + config.iibb / 100;
-  precio *= 1 + config.iva / 100;
+  if (config.flete > 0) precio += config.flete;
+  if (config.ganancia > 0 && config.ganancia < 100) precio = precio / (1 - config.ganancia / 100);
+  if (config.iva > 0) precio *= 1 + config.iva / 100;
 
   const precioFinal = Math.round(precio);
 
@@ -464,3 +461,4 @@ const port = Number(process.env.PORT) || 3000;
 app.listen(port, "0.0.0.0", () => {
   console.log(`Servidor corriendo en http://0.0.0.0:${port}`);
 });
+
