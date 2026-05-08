@@ -131,14 +131,42 @@ function normalizarMimeType(value) {
   return MIME_TYPES_PERMITIDOS.has(mime) ? mime : "image/jpeg";
 }
 
+function corregirOCR(texto) {
+  if (typeof texto !== "string") return texto;
+
+  const EXCEPCIONES_J_FINAL = new Set([
+    "reloj", "boj", "carcaj", "troj", "dij", "alioj",
+  ]);
+
+  return texto
+    .split(/(\s+)/)
+    .map((palabra) => {
+      const limpia = palabra.trim().toLowerCase();
+
+      if (
+        limpia.length >= 4 &&
+        /j$/i.test(limpia) &&
+        !EXCEPCIONES_J_FINAL.has(limpia)
+      ) {
+        const ultimaLetra = palabra.slice(-1);
+        const reemplazo = ultimaLetra === "J" ? "S" : "s";
+        return palabra.slice(0, -1) + reemplazo;
+      }
+
+      return palabra;
+    })
+    .join("");
+}
+
 function normalizarProductoDetectado(item, index) {
-  const textoDetectado = obtenerPrimerTextoValido(
+  const textoDetectadoCrudo = obtenerPrimerTextoValido(
     item?.texto_detectado,
     item?.texto,
     item?.nombre,
     item?.producto,
     item?.descripcion
   );
+  const textoDetectado = corregirOCR(textoDetectadoCrudo);
   const precio = normalizarPrecio(
     item?.precio ?? item?.valor ?? item?.price ?? item?.importe
   );
@@ -318,6 +346,7 @@ app.post("/api/detectar-productos-ia", async (req, res) => {
                   "Devuelve el texto exacto.",
                   "Si el nombre esta cortado, dejalo cortado.",
                   "Ignora 24U, x12, 500gr y similares si no son claramente el producto.",
+                  "IMPORTANTE: el texto suele estar manuscrito en cursiva. En espanol son extremadamente raras las palabras que terminan en J. Si una palabra termina en J, casi seguro es una S mal escrita (ejemplo: BROWNIEJ es BROWNIES, POSTREJ es POSTRES, DULCEJ es DULCES). Corregilo cuando lo detectes.",
                   'Formato: {"productos":[{"texto_detectado":"string","precio":1234}]}',
                   "Precio como numero entero.",
                   "Solo JSON valido.",
@@ -461,4 +490,3 @@ const port = Number(process.env.PORT) || 3000;
 app.listen(port, "0.0.0.0", () => {
   console.log(`Servidor corriendo en http://0.0.0.0:${port}`);
 });
-
